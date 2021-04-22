@@ -16,19 +16,11 @@ import logging
 from parselmouth.praat import call, run_file
 import numpy as np
 #__import__("my-voice-analysis")
-
-
 PATH_AUDIO_TEMP = './temp/audio.wav'
-
-logger = logging.getLogger('voice_features')
-hdlr = logging.FileHandler('voice_features.log')
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr)
-logger.setLevel(logging.DEBUG)
+PATCH_TEMP_DIR = './temp'
 
 
-def do_compute(file):
+def do_compute(file, logger):
     sound = "../{}".format(file)
     source_run = "./my-voice-analysis/myspsolution.praat"
     path = "../temp/"
@@ -68,7 +60,7 @@ def from_flac_to_wav(full_path):
     return PATH_AUDIO_TEMP
 
 
-def measure_voice_features(df):
+def measure_voice_features(df, logger):
 
     frames = list()
     for index, row in tqdm(df.iterrows()):
@@ -78,11 +70,26 @@ def measure_voice_features(df):
         if file_path.endswith('.flac'):
             file_path = from_flac_to_wav(file_path)
 
-        frames.append(do_compute(file_path))
+        frames.append(do_compute(file_path), logger)
 
     dataset = pd.concat(frames)
     dataset = dataset.reset_index()
     return dataset
+
+
+def setup():
+
+    if not os.path.exists(PATCH_TEMP_DIR):
+        os.makedirs(PATCH_TEMP_DIR)
+
+    logger = logging.getLogger('voice_features')
+    hdlr = logging.FileHandler('voice_features.log')
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    hdlr.setFormatter(formatter)
+    logger.addHandler(hdlr)
+    logger.setLevel(logging.DEBUG)
+
+    return logger
 
 
 def main():
@@ -96,11 +103,13 @@ def main():
     else:
         destination = "./temp/data.csv"
 
+    logger = setup()
+
     # read file
     df = pd.read_csv(args.src, sep='\t')
 
     # computer features
-    features_df = measure_voice_features(df)
+    features_df = measure_voice_features(df, logger)
 
     # merge and store info
     final_df = pd.concat([df, features_df], axis=1)
