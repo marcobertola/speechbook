@@ -63,8 +63,10 @@ def from_flac_to_wav(full_path):
 def measure_voice_features(df, logger):
 
     frames = list()
+    total_rows = len(df)
     for index, row in tqdm(df.iterrows()):
         file_path = row[1]
+        print(r"Process file: {}\{} \t {}".format(index, total_rows, file_path))
         assert os.path.isfile(file_path), f"The path \"{path}\" does not lead to a file! Check that the second column" \
                                           f"in your tsv file contains paths to audio files. "
         if file_path.endswith('.flac'):
