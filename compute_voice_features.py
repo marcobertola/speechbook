@@ -63,7 +63,7 @@ def measure_voice_features(df, logger):
         if file_path.endswith('.flac'):
             file_path = f2w.convert(file_path)
 
-        frames.append(do_compute(file_path), logger)
+        frames.append(do_compute(file_path, logger))
 
     dataset = pd.concat(frames)
     dataset = dataset.reset_index()
