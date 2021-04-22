@@ -10,11 +10,10 @@ import os
 import argparse
 import pandas as pd
 from tqdm import tqdm
-import soundfile as sf
-import librosa
 import logging
 from parselmouth.praat import call, run_file
 import numpy as np
+import flac_to_wav as f2w
 #__import__("my-voice-analysis")
 PATH_AUDIO_TEMP = './temp/audio.wav'
 PATCH_TEMP_DIR = './temp'
@@ -52,14 +51,6 @@ def do_compute(file, logger):
     return
 
 
-def from_flac_to_wav(full_path):
-
-    data, sr = sf.read(full_path)
-    y = librosa.resample(data, 16000, 44100)
-    sf.write(PATH_AUDIO_TEMP, y, 44100, 'PCM_24')
-    return PATH_AUDIO_TEMP
-
-
 def measure_voice_features(df, logger):
 
     frames = list()
@@ -70,7 +61,7 @@ def measure_voice_features(df, logger):
         assert os.path.isfile(file_path), f"The path \"{path}\" does not lead to a file! Check that the second column" \
                                           f"in your tsv file contains paths to audio files. "
         if file_path.endswith('.flac'):
-            file_path = from_flac_to_wav(file_path)
+            file_path = f2w.convert(file_path)
 
         frames.append(do_compute(file_path), logger)
 
