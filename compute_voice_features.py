@@ -21,10 +21,10 @@ PATCH_TEMP_DIR = './temp'
 
 
 def do_compute(file, logger):
-    sound = "../{}".format(file)
     source_dir = pathlib.Path(__file__).parent.absolute()
+    sound = "{}/../{}".format(source_dir, file)
     source_run = "{}/my-voice-analysis/myspsolution.praat".format(source_dir)
-    path = "../temp/"
+    path = "{}/../temp/".format(source_dir)
     try:
         objects = run_file(source_run, -20, 2, 0.3, "yes", sound, path, 80, 400, 0.01, capture_output=True)
         z1 = str(objects[1])  # This will print the info from the textgrid object
@@ -66,6 +66,7 @@ def measure_voice_features(df, logger):
             file_path = f2w.convert(file_path)
 
         frames.append(do_compute(file_path, logger))
+        break
 
     dataset = pd.concat(frames)
     dataset = dataset.reset_index()
