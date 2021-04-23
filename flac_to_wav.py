@@ -2,9 +2,11 @@ import os
 import argparse
 import soundfile as sf
 import librosa
+import pathlib
 
-PATH_AUDIO_TEMP = './temp/audio.wav'
-PATH_DIR_TEMP = './temp'
+PATH_FILE_DIR = pathlib.Path(__file__).parent.absolute()
+PATH_AUDIO_TEMP = '{}/temp/audio.wav'.format(PATH_FILE_DIR)
+PATH_TEMP_DIR = '{}/temp'.format(PATH_FILE_DIR)
 
 
 def convert(src_path, dst_path=PATH_AUDIO_TEMP, ffmpeg=True):
@@ -26,8 +28,8 @@ def convert(src_path, dst_path=PATH_AUDIO_TEMP, ffmpeg=True):
 
 def setup():
 
-    if not os.path.exists(PATH_DIR_TEMP):
-        os.makedirs(PATH_DIR_TEMP)
+    if not os.path.exists(PATH_TEMP_DIR):
+        os.makedirs(PATH_TEMP_DIR)
 
 
 def main():
