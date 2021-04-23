@@ -76,7 +76,6 @@ def measure_voice_features(df, logger):
             file_path = f2w.convert(file_path)
 
         frames.append(do_compute(file_path, logger))
-        break
 
     dataset = pd.concat(frames)
     dataset = dataset.reset_index()
