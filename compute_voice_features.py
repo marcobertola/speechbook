@@ -28,13 +28,13 @@ print("PATH_TEMP_DIR: {}".format(PATH_TEMP_DIR))
 
 def do_compute(file, logger):
 
-    sound = "{}/../{}".format(PATH_FILE_DIR, file)
+    sound = "{}/..{}".format(PATH_FILE_DIR, file)
     source_run = "{}/my-voice-analysis/myspsolution.praat".format(PATH_FILE_DIR)
     path = "{}/../temp/".format(PATH_FILE_DIR)
 
     print("File: {}".format(file))
     print("Sound: {}".format(sound))
-    print("Path: {}".format(sound))
+    print("Path: {}".format(path))
     try:
         objects = run_file(source_run, -20, 2, 0.3, "yes", sound, path, 80, 400, 0.01, capture_output=True)
         z1 = str(objects[1])  # This will print the info from the textgrid object
