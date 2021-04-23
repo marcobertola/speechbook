@@ -16,15 +16,25 @@ import numpy as np
 import flac_to_wav as f2w
 import pathlib
 #__import__("my-voice-analysis")
-PATH_AUDIO_TEMP = './temp/audio.wav'
-PATCH_TEMP_DIR = './temp'
+PATH_FILE_DIR = pathlib.Path(__file__).parent.absolute()
+PATH_AUDIO_TEMP = '{}/temp/audio.wav'.format(PATH_FILE_DIR)
+PATH_TEMP_DIR = '{}/temp'.format(PATH_FILE_DIR)
+PATH_DEFAULT_DATA_DST = "{}/temp/data.csv".format(PATH_FILE_DIR)
+
+print("PATH_FILE_DIR: {}".format(PATH_FILE_DIR))
+print("PATH_AUDIO_TEMP: {}".format(PATH_AUDIO_TEMP))
+print("PATH_TEMP_DIR: {}".format(PATH_TEMP_DIR))
 
 
 def do_compute(file, logger):
-    source_dir = pathlib.Path(__file__).parent.absolute()
-    sound = "{}/../{}".format(source_dir, file)
-    source_run = "{}/my-voice-analysis/myspsolution.praat".format(source_dir)
-    path = "{}/../temp/".format(source_dir)
+
+    sound = "{}/../{}".format(PATH_FILE_DIR, file)
+    source_run = "{}/my-voice-analysis/myspsolution.praat".format(PATH_FILE_DIR)
+    path = "{}/../temp/".format(PATH_FILE_DIR)
+
+    print("File: {}".format(file))
+    print("Sound: {}".format(sound))
+    print("Path: {}".format(sound))
     try:
         objects = run_file(source_run, -20, 2, 0.3, "yes", sound, path, 80, 400, 0.01, capture_output=True)
         z1 = str(objects[1])  # This will print the info from the textgrid object
@@ -75,8 +85,8 @@ def measure_voice_features(df, logger):
 
 def setup():
 
-    if not os.path.exists(PATCH_TEMP_DIR):
-        os.makedirs(PATCH_TEMP_DIR)
+    if not os.path.exists(PATH_TEMP_DIR):
+        os.makedirs(PATH_TEMP_DIR)
 
     logger = logging.getLogger('voice_features')
     hdlr = logging.FileHandler('voice_features.log')
@@ -97,7 +107,7 @@ def main():
     if args.dst:
         destination = args.dst
     else:
-        destination = "./temp/data.csv"
+        destination = PATH_DEFAULT_DATA_DST
 
     logger = setup()
 
