@@ -14,6 +14,7 @@ import logging
 from parselmouth.praat import call, run_file
 import numpy as np
 import flac_to_wav as f2w
+import pathlib
 #__import__("my-voice-analysis")
 PATH_AUDIO_TEMP = './temp/audio.wav'
 PATCH_TEMP_DIR = './temp'
@@ -21,7 +22,8 @@ PATCH_TEMP_DIR = './temp'
 
 def do_compute(file, logger):
     sound = "../{}".format(file)
-    source_run = "./my-voice-analysis/myspsolution.praat"
+    source_dir = pathlib.Path(__file__).parent.absolute()
+    source_run = "{}/my-voice-analysis/myspsolution.praat".format(source_dir)
     path = "../temp/"
     try:
         objects = run_file(source_run, -20, 2, 0.3, "yes", sound, path, 80, 400, 0.01, capture_output=True)
