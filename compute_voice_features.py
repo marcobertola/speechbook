@@ -28,9 +28,9 @@ print("PATH_TEMP_DIR: {}".format(PATH_TEMP_DIR))
 
 def do_compute(file, logger):
 
-    sound = "{}/..{}".format(PATH_FILE_DIR, file)
+    sound = "../temp/audio.wav"
     source_run = "{}/my-voice-analysis/myspsolution.praat".format(PATH_FILE_DIR)
-    path = "{}/../temp/".format(PATH_FILE_DIR)
+    path = "../temp/"
 
     print("File: {}".format(file))
     print("Sound: {}".format(sound))
